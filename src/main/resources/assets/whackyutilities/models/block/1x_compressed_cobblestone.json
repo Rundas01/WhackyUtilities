@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "whackyutilities:block/1x_compressed_cobblestone"
+  }
+}
