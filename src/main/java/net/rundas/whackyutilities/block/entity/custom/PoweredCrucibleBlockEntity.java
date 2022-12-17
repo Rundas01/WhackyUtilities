@@ -79,6 +79,7 @@ public class PoweredCrucibleBlockEntity extends BlockEntity implements MenuProvi
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
+            PoweredCrucibleBlockEntity.this.level.sendBlockUpdated(PoweredCrucibleBlockEntity.this.getBlockPos(),PoweredCrucibleBlockEntity.this.getBlockState(),PoweredCrucibleBlockEntity.this.getBlockState(),2);
             setChanged();
         }
 
@@ -94,6 +95,7 @@ public class PoweredCrucibleBlockEntity extends BlockEntity implements MenuProvi
     private final FluidTank FLUID_TANK = new FluidTank(64000) {
         @Override
         protected void onContentsChanged() {
+            PoweredCrucibleBlockEntity.this.level.sendBlockUpdated(PoweredCrucibleBlockEntity.this.getBlockPos(),PoweredCrucibleBlockEntity.this.getBlockState(),PoweredCrucibleBlockEntity.this.getBlockState(),2);
             setChanged();
         }
     };
@@ -113,6 +115,7 @@ public class PoweredCrucibleBlockEntity extends BlockEntity implements MenuProvi
     private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(64000, 256) {
         @Override
         public void onEnergyChanged() {
+            PoweredCrucibleBlockEntity.this.level.sendBlockUpdated(PoweredCrucibleBlockEntity.this.getBlockPos(),PoweredCrucibleBlockEntity.this.getBlockState(),PoweredCrucibleBlockEntity.this.getBlockState(),2);
             setChanged();
         }
     };

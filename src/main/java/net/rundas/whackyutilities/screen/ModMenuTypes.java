@@ -1,6 +1,5 @@
 package net.rundas.whackyutilities.screen;
 
-import ca.weblite.objc.Proxy;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
