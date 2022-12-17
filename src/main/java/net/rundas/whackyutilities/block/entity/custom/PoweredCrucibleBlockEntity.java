@@ -23,6 +23,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -30,25 +32,26 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.rundas.whackyutilities.block.custom.CrucibleBlock;
+import net.rundas.whackyutilities.block.custom.PoweredCrucibleBlock;
 import net.rundas.whackyutilities.block.entity.ModBlockEntities;
-import net.rundas.whackyutilities.screen.CrucibleMenu;
+import net.rundas.whackyutilities.screen.PoweredCrucibleMenu;
+import net.rundas.whackyutilities.util.ModEnergyStorage;
 import net.rundas.whackyutilities.util.WrappedHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
+public class PoweredCrucibleBlockEntity extends BlockEntity implements MenuProvider {
 
-    public CrucibleBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.CRUCIBLE_BLOCK_ENTITY.get(), pos, state);
+    public PoweredCrucibleBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.POWERED_CRUCIBLE_BLOCK_ENTITY.get(), pos, state);
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
-                    case 0 -> CrucibleBlockEntity.this.stoneValue;
-                    case 1 -> CrucibleBlockEntity.this.maxStoneValue;
+                    case 0 -> PoweredCrucibleBlockEntity.this.stoneValue;
+                    case 1 -> PoweredCrucibleBlockEntity.this.maxStoneValue;
                     default -> 0;
                 };
             }
@@ -56,8 +59,8 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
             @Override
             public void set(int index, int value) {
                 switch (index) {
-                    case 0 -> CrucibleBlockEntity.this.stoneValue = value;
-                    case 1 -> CrucibleBlockEntity.this.maxStoneValue = value;
+                    case 0 -> PoweredCrucibleBlockEntity.this.stoneValue = value;
+                    case 1 -> PoweredCrucibleBlockEntity.this.maxStoneValue = value;
                 }
             }
 
@@ -68,7 +71,7 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
         };
     }
 
-    public CrucibleBlockEntity(BlockPos pos, BlockState state, int tier) {
+    public PoweredCrucibleBlockEntity(BlockPos pos, BlockState state, int tier) {
         this(pos,state);
         this.tier = tier;
     }
@@ -95,14 +98,6 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
         }
     };
 
-    public void setFluid(FluidStack stack) {
-        this.FLUID_TANK.setFluid(stack);
-    }
-
-    public FluidStack getFluidStack() {
-        return this.FLUID_TANK.getFluid();
-    }
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
             Map.of(Direction.DOWN, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i == 2, (i, s) -> false)),
@@ -114,6 +109,13 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
                     Direction.WEST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (index) -> index == 0 || index == 1,
                             (index, stack) -> itemHandler.isItemValid(0, stack) || itemHandler.isItemValid(1, stack))));
     private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
+    private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(64000, 256) {
+        @Override
+        public void onEnergyChanged() {
+            setChanged();
+        }
+    };
     protected final ContainerData data;
     public int stoneValue = 0;
     private int maxStoneValue = 64000;
@@ -122,14 +124,14 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent("Crucible");
+        return new TextComponent("Powered Crucible");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         this.level.sendBlockUpdated(this.getBlockPos(),this.getBlockState(),this.getBlockState(),2);
-        return new CrucibleMenu(id, inventory, this, this.data);
+        return new PoweredCrucibleMenu(id, inventory, this, this.data);
     }
 
     @Override
@@ -139,7 +141,7 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
                 return lazyItemHandler.cast();
             }
             if(directionWrappedHandlerMap.containsKey(side)) {
-                Direction localDir = this.getBlockState().getValue(CrucibleBlock.FACING);
+                Direction localDir = this.getBlockState().getValue(PoweredCrucibleBlock.FACING);
 
                 if(side == Direction.UP || side == Direction.DOWN) {
                     return directionWrappedHandlerMap.get(side).cast();
@@ -156,6 +158,9 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
         if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             return lazyFluidHandler.cast();
         }
+        if(cap == CapabilityEnergy.ENERGY) {
+            return lazyEnergyHandler.cast();
+        }
         return super.getCapability(cap, side);
     }
 
@@ -164,6 +169,7 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
         super.onLoad();
         lazyItemHandler = LazyOptional.of(() -> itemHandler);
         lazyFluidHandler = LazyOptional.of(() -> FLUID_TANK);
+        lazyEnergyHandler = LazyOptional.of(() -> ENERGY_STORAGE);
     }
 
     @Override
@@ -171,32 +177,33 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
         lazyFluidHandler.invalidate();
+        lazyEnergyHandler.invalidate();
     }
 
     @Override
     protected void saveAdditional(CompoundTag nbt) {
-        nbt.put("crucible.inventory", itemHandler.serializeNBT());
-        nbt.putInt("crucible.stone", this.stoneValue);
+        nbt.put("powered_crucible.inventory", itemHandler.serializeNBT());
+        nbt.putInt("powered_crucible.stone", this.stoneValue);
         nbt = FLUID_TANK.writeToNBT(nbt);
+        nbt.putInt("powered_crucible.energy", ENERGY_STORAGE.getEnergyStored());
         super.saveAdditional(nbt);
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        itemHandler.deserializeNBT(nbt.getCompound("crucible.inventory"));
-        stoneValue = nbt.getInt("crucible.stone");
+        itemHandler.deserializeNBT(nbt.getCompound("powered_crucible.inventory"));
+        stoneValue = nbt.getInt("powered_crucible.stone");
+        ENERGY_STORAGE.setEnergy(nbt.getInt("powered_crucible.energy"));
         FLUID_TANK.readFromNBT(nbt);
     }
 
     public void drops() {
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
-        }
+        inventory.setItem(0, itemHandler.getStackInSlot(0));
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
-    public static void tick(Level pLevel, BlockPos pPos, BlockState pState, CrucibleBlockEntity pBlockEntity) {
+    public static void tick(Level pLevel, BlockPos pPos, BlockState pState, PoweredCrucibleBlockEntity pBlockEntity) {
         if (pBlockEntity.canConvertStone(pBlockEntity)){
             pBlockEntity.convertStone(pBlockEntity);
         }
@@ -205,20 +212,20 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    public boolean canConvertStone(CrucibleBlockEntity pBlockEntity){
+    public boolean canConvertStone(PoweredCrucibleBlockEntity pBlockEntity){
         return pBlockEntity.itemHandler.getStackInSlot(0).is(Tags.Items.STONE) && pBlockEntity.stoneValue <= pBlockEntity.maxStoneValue - 1000;
     }
 
-    private void convertStone(CrucibleBlockEntity pBlockEntity){
+    private void convertStone(PoweredCrucibleBlockEntity pBlockEntity){
         pBlockEntity.itemHandler.extractItem(0,1,false);
         pBlockEntity.stoneValue += 1000;
     }
 
-    public boolean canCreateLava(CrucibleBlockEntity pBlockEntity){
+    public boolean canCreateLava(PoweredCrucibleBlockEntity pBlockEntity){
         return pBlockEntity.stoneValue > 0 && pBlockEntity.FLUID_TANK.getSpace() > 0;
     }
 
-    private void createLava(CrucibleBlockEntity pBlockEntity){
+    private void createLava(PoweredCrucibleBlockEntity pBlockEntity){
         int fluid;
         fluid = Math.min(1000,pBlockEntity.stoneValue);
         pBlockEntity.stoneValue -= fluid;
@@ -229,8 +236,9 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbt = new CompoundTag();
-        nbt.put("crucible.inventory", itemHandler.serializeNBT());
-        nbt.putInt("crucible.stone", this.stoneValue);
+        nbt.put("powered_crucible.inventory", itemHandler.serializeNBT());
+        nbt.putInt("powered_crucible.stone", this.stoneValue);
+        ENERGY_STORAGE.setEnergy(nbt.getInt("powered_crucible.energy"));
         nbt = FLUID_TANK.writeToNBT(nbt);
         return nbt;
     }
@@ -240,4 +248,11 @@ public class CrucibleBlockEntity extends BlockEntity implements MenuProvider {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    public FluidStack getFluidStack() {
+        return this.FLUID_TANK.getFluid();
+    }
+
+    public IEnergyStorage getEnergyStorage() {
+        return this.ENERGY_STORAGE;
+    }
 }

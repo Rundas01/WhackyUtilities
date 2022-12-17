@@ -21,12 +21,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import net.rundas.whackyutilities.block.entity.ModBlockEntities;
-import net.rundas.whackyutilities.block.entity.custom.CrucibleBlockEntity;
+import net.rundas.whackyutilities.block.entity.custom.PoweredCrucibleBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class CrucibleBlock extends BaseEntityBlock {
+public class PoweredCrucibleBlock extends BaseEntityBlock {
 
-    public CrucibleBlock(Properties properties, int tier) {
+    public PoweredCrucibleBlock(Properties properties, int tier) {
         super(properties);
         this.tier = tier;
     }
@@ -72,8 +72,8 @@ public class CrucibleBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof CrucibleBlockEntity) {
-                ((CrucibleBlockEntity) blockEntity).drops();
+            if (blockEntity instanceof PoweredCrucibleBlockEntity) {
+                ((PoweredCrucibleBlockEntity) blockEntity).drops();
             }
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
@@ -84,8 +84,8 @@ public class CrucibleBlock extends BaseEntityBlock {
                                  Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof CrucibleBlockEntity) {
-                NetworkHooks.openGui(((ServerPlayer)pPlayer), (CrucibleBlockEntity)entity, pPos);
+            if(entity instanceof PoweredCrucibleBlockEntity) {
+                NetworkHooks.openGui(((ServerPlayer)pPlayer), (PoweredCrucibleBlockEntity)entity, pPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }
@@ -97,14 +97,14 @@ public class CrucibleBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CrucibleBlockEntity(pos, state, this.tier);
+        return new PoweredCrucibleBlockEntity(pos, state, this.tier);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
                                                                   BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlockEntities.CRUCIBLE_BLOCK_ENTITY.get(),
-                CrucibleBlockEntity::tick);
+        return createTickerHelper(type, ModBlockEntities.POWERED_CRUCIBLE_BLOCK_ENTITY.get(),
+                PoweredCrucibleBlockEntity::tick);
     }
 }

@@ -12,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.rundas.whackyutilities.WhackyUtilities;
 import net.rundas.whackyutilities.block.custom.CrucibleBlock;
+import net.rundas.whackyutilities.block.custom.PoweredCrucibleBlock;
 import net.rundas.whackyutilities.item.ModCreativeModeTab;
 import net.rundas.whackyutilities.item.ModItems;
 
@@ -37,6 +38,10 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> CRUCIBLE = registerBlock("crucible",
             () -> new CrucibleBlock(BlockBehaviour.Properties.of(Material.METAL)
+                    .strength(9f).requiresCorrectToolForDrops(),1), ModCreativeModeTab.WHACKY_UTILITIES);
+
+    public static final RegistryObject<Block> POWERED_CRUCIBLE = registerBlock("powered_crucible",
+            () -> new PoweredCrucibleBlock(BlockBehaviour.Properties.of(Material.METAL)
                     .strength(9f).requiresCorrectToolForDrops(),1), ModCreativeModeTab.WHACKY_UTILITIES);
 
     public static final RegistryObject<Block> IRON_CRUCIBLE = registerBlock("iron_crucible",

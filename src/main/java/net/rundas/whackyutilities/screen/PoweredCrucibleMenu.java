@@ -10,18 +10,18 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.rundas.whackyutilities.block.ModBlocks;
-import net.rundas.whackyutilities.block.entity.custom.CrucibleBlockEntity;
+import net.rundas.whackyutilities.block.entity.custom.PoweredCrucibleBlockEntity;
 
-public class CrucibleMenu extends AbstractContainerMenu {
+public class PoweredCrucibleMenu extends AbstractContainerMenu {
 
-    public CrucibleMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
+    public PoweredCrucibleMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
-    public CrucibleMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.CRUCIBLE_MENU.get(), pContainerId);
+    public PoweredCrucibleMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
+        super(ModMenuTypes.POWERED_CRUCIBLE_MENU.get(), pContainerId);
         checkContainerSize(inv, 1);
-        blockEntity = ((CrucibleBlockEntity) entity);
+        blockEntity = ((PoweredCrucibleBlockEntity) entity);
         this.level = inv.player.level;
         this.data = data;
 
@@ -32,7 +32,7 @@ public class CrucibleMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(handler, 0, 20, 6));
         });
     }
-    public final CrucibleBlockEntity blockEntity;
+    public final PoweredCrucibleBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
@@ -91,8 +91,7 @@ public class CrucibleMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.CRUCIBLE.get())
-                ||stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.IRON_CRUCIBLE.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.POWERED_CRUCIBLE.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {
