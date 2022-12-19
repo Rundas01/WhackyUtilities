@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "whackyutilities:2x_compressed_deepslate"
+    }
+  },
+  "result": {
+    "item": "whackyutilities:3x_compressed_deepslate"
+  }
+}

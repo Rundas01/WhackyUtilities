@@ -1,0 +1,12 @@
+{
+  "type": "whackyutilities:hammering",
+  "ingredients": [
+    {
+      "item": "whackyutilities:1x_compressed_basalt"
+    }
+  ],
+  "output": {
+    "item": "whackyutilities:crushed_basalt",
+    "count": 9
+  }
+}

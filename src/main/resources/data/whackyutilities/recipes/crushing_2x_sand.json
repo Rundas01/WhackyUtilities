@@ -1,0 +1,12 @@
+{
+  "type": "whackyutilities:hammering",
+  "ingredients": [
+    {
+      "item": "whackyutilities:2x_compressed_sand"
+    }
+  ],
+  "output": {
+    "item": "whackyutilities:dust",
+    "count": 81
+  }
+}

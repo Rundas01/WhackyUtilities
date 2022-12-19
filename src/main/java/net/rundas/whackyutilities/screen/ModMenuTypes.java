@@ -18,6 +18,8 @@ public class ModMenuTypes {
             registerMenuType(CrucibleMenu::new, "crucible_menu");
     public static final RegistryObject<MenuType<PoweredCrucibleMenu>> POWERED_CRUCIBLE_MENU =
             registerMenuType(PoweredCrucibleMenu::new, "powered_crucible_menu");
+    public static final RegistryObject<MenuType<AutoHammerMenu>> AUTO_HAMMER_MENU =
+            registerMenuType(AutoHammerMenu::new, "auto_hammer_menu");
 
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory,
                                                                                                  String name) {

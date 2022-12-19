@@ -1,0 +1,12 @@
+{
+  "type": "whackyutilities:hammering",
+  "ingredients": [
+    {
+      "item": "whackyutilities:1x_compressed_end_stone"
+    }
+  ],
+  "output": {
+    "item": "whackyutilities:crushed_end_stone",
+    "count": 9
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "whackyutilities:hammering",
+  "ingredients": [
+    {
+      "item": "whackyutilities:3x_compressed_cobblestone"
+    }
+  ],
+  "output": {
+    "item": "minecraft:gravel",
+    "count": 729
+  }
+}

@@ -44,7 +44,7 @@ public class CrucibleScreen extends AbstractContainerScreen<CrucibleMenu> {
     }
 
     private void renderFluidAreaTooltips(PoseStack pPoseStack, int pMouseX, int pMouseY, int x, int y) {
-        if(isMouseAboveArea(pMouseX, pMouseY, x, y, 55, 15,16,62)) {
+        if(isMouseAboveArea(pMouseX, pMouseY, x, y, 114, 15,16,62)) {
             renderTooltip(pPoseStack, renderer.getTooltip(menu.blockEntity.getFluidStack(), TooltipFlag.Default.NORMAL), Optional.empty(), pMouseX - x, pMouseY - y);
         }
     }
@@ -87,6 +87,6 @@ public class CrucibleScreen extends AbstractContainerScreen<CrucibleMenu> {
 
     public void drawStings(PoseStack pPoseStack, int x, int y) {
         drawString(pPoseStack, Minecraft.getInstance().font, "Material: "+menu.blockEntity.stoneValue,x+8,y+40,0xffffff);
-        drawString(pPoseStack, Minecraft.getInstance().font, "Conversion:",x+8,y+54,0xffffff);
+        drawString(pPoseStack, Minecraft.getInstance().font, "Conversion: "+menu.blockEntity.getModifier(menu.blockEntity)+"X",x+8,y+54,0xffffff);
     }
 }

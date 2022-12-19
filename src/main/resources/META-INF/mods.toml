@@ -29,13 +29,13 @@ displayName="Whacky Utilities" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-credits="Thanks for this example mod goes to Java" #optional
+credits="Shoutouts to diesieben07, BluSunrize, noeppi-noeppi and mezz for utility files used legally in this mod. Huge thanks to the modding support team of the KaupenHub and Modded Minecraft Discords for helping me out with all the questions I had."
 # A text field displayed in the mod UI
 authors="Rundas" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Just a small Mod which adds some whacky Utilities!
-T'''
+'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.whackyutilities]] #optional
     # the modid of the dependency

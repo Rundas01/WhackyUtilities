@@ -1,0 +1,12 @@
+{
+  "type": "whackyutilities:hammering",
+  "ingredients": [
+    {
+      "item": "whackyutilities:2x_compressed_netherrack"
+    }
+  ],
+  "output": {
+    "item": "whackyutilities:crushed_netherrack",
+    "count": 81
+  }
+}

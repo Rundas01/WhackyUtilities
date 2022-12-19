@@ -25,10 +25,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-// CREDIT: https://github.com/mezz/JustEnoughItems by mezz
-// Under MIT-License: https://github.com/mezz/JustEnoughItems/blob/1.19/LICENSE.txt
-// Includes major rewrites and methods from:
-// https://github.com/mezz/JustEnoughItems/blob/1.19/Forge/src/main/java/mezz/jei/forge/platform/FluidHelper.java
 public class FluidTankRenderer {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -181,13 +177,12 @@ public class FluidTankRenderer {
             tooltip.add(displayName);
 
             long amount = fluidStack.getAmount();
-            long milliBuckets = (amount * 1000) / FluidAttributes.BUCKET_VOLUME;
 
             if (tooltipMode == TooltipMode.SHOW_AMOUNT_AND_CAPACITY) {
-                MutableComponent amountString = new TranslatableComponent("whackyutilities.tooltip.liquid.amount.with.capacity"+nf.format(milliBuckets)+nf.format(capacity));
+                MutableComponent amountString = new TranslatableComponent("whackyutilities.tooltip.liquid.amount.with.capacity",amount,capacity);
                 tooltip.add(amountString.withStyle(ChatFormatting.GRAY));
             } else if (tooltipMode == TooltipMode.SHOW_AMOUNT) {
-                MutableComponent amountString = new TranslatableComponent("whackyutilities.tooltip.liquid.amount"+nf.format(milliBuckets));
+                MutableComponent amountString = new TranslatableComponent("whackyutilities.tooltip.liquid.amount",amount);
                 tooltip.add(amountString.withStyle(ChatFormatting.GRAY));
             }
         } catch (RuntimeException e) {

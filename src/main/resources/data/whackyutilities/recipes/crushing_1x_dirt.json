@@ -1,0 +1,12 @@
+{
+  "type": "whackyutilities:hammering",
+  "ingredients": [
+    {
+      "item": "whackyutilities:1x_compressed_dirt"
+    }
+  ],
+  "output": {
+    "item": "minecraft:sand",
+    "count": 9
+  }
+}

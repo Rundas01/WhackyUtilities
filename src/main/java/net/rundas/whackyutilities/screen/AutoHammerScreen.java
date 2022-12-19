@@ -17,15 +17,13 @@ import java.util.Optional;
 
 import static net.rundas.whackyutilities.util.MouseUtils.isMouseAboveArea;
 
-public class PoweredCrucibleScreen extends AbstractContainerScreen<PoweredCrucibleMenu> {
+public class AutoHammerScreen extends AbstractContainerScreen<AutoHammerMenu> {
 
-    public PoweredCrucibleScreen(PoweredCrucibleMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public AutoHammerScreen(AutoHammerMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(WhackyUtilities.MOD_ID, "textures/gui/powered_crucible_gui.png");
-
-    private FluidTankRenderer renderer;
+            new ResourceLocation(WhackyUtilities.MOD_ID, "textures/gui/auto_hammer_gui.png");
     private EnergyInfoArea energyInfoArea;
 
     @Override
@@ -38,27 +36,18 @@ public class PoweredCrucibleScreen extends AbstractContainerScreen<PoweredCrucib
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         energyInfoArea = new EnergyInfoArea(x + 156, y + 15, menu.blockEntity.getEnergyStorage(), 8 ,62);
-        renderer = new FluidTankRenderer(64000, true, 16, 62);
     }
 
     @Override
     protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
-        renderFluidAreaTooltips(pPoseStack, pMouseX, pMouseY, x, y);
         renderEnergyAreaTooltips(pPoseStack, pMouseX, pMouseY, x, y);
     }
 
     private void renderEnergyAreaTooltips(PoseStack pPoseStack, int pMouseX, int pMouseY, int x, int y) {
         if(isMouseAboveArea(pMouseX, pMouseY, x, y, 156, 15, 8, 62)) {
             renderTooltip(pPoseStack, energyInfoArea.getTooltips(),
-                    Optional.empty(), pMouseX - x, pMouseY - y);
-        }
-    }
-
-    private void renderFluidAreaTooltips(PoseStack pPoseStack, int pMouseX, int pMouseY, int x, int y) {
-        if(isMouseAboveArea(pMouseX, pMouseY, x, y, 114, 15,16,62)) {
-            renderTooltip(pPoseStack, renderer.getTooltip(menu.blockEntity.getFluidStack(), TooltipFlag.Default.NORMAL),
                     Optional.empty(), pMouseX - x, pMouseY - y);
         }
     }
@@ -71,23 +60,13 @@ public class PoweredCrucibleScreen extends AbstractContainerScreen<PoweredCrucib
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
-        renderStoneArrow(pPoseStack, x, y);
-        renderLavaArrowAndFlame(pPoseStack, x, y);
-        drawStings(pPoseStack, x, y);
+        renderProgressArrow(pPoseStack, x, y);
         energyInfoArea.draw(pPoseStack);
-        renderer.render(pPoseStack, x + 114, y + 15, menu.blockEntity.getFluidStack());
     }
 
-    private void renderStoneArrow(PoseStack pPoseStack, int x, int y) {
-        if(menu.blockEntity.canConvertStone(menu.blockEntity)) {
-            blit(pPoseStack, x + 23, y + 24, 179, 10, 10, 13);
-        }
-    }
-
-    private void renderLavaArrowAndFlame(PoseStack pPoseStack, int x, int y) {
-        if(menu.blockEntity.canCreateLava(menu.blockEntity)) {
-            blit(pPoseStack, x + 91, y + 41, 176, 0, 19, 10);
-            blit(pPoseStack, x + 99, y + 58, 176, 10, 3, 12);
+    private void renderProgressArrow(PoseStack pPoseStack, int x, int y) {
+        if(menu.blockEntity.progress > 0) {
+            blit(pPoseStack, x + 47, y + 41, 176, 0, menu.getScaledProgress(), 10);
         }
     }
 
@@ -96,10 +75,5 @@ public class PoweredCrucibleScreen extends AbstractContainerScreen<PoweredCrucib
         renderBackground(pPoseStack);
         super.render(pPoseStack, mouseX, mouseY, delta);
         renderTooltip(pPoseStack, mouseX, mouseY);
-    }
-
-    public void drawStings(PoseStack pPoseStack, int x, int y) {
-        drawString(pPoseStack, Minecraft.getInstance().font, "Material: "+menu.blockEntity.stoneValue,x+8,y+40,0xffffff);
-        drawString(pPoseStack, Minecraft.getInstance().font, "Conversion: "+menu.blockEntity.getModifier(menu.blockEntity)+"X",x+8,y+54,0xffffff);
     }
 }

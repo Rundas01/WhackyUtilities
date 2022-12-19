@@ -39,7 +39,7 @@
   "block.whackyutilities.crushed_end_stone": "Crushed End Stone",
   "block.whackyutilities.crushed_netherrack": "Crushed Netherrack",
   "block.whackyutilities.crushed_deepslate": "Crushed Deepslate",
-  "block.whackyutilities.auto_hammer": "Auto Hammer",
+  "block.whackyutilities.iron_auto_hammer": "Iron Auto Hammer",
   "block.whackyutilities.gold_auto_hammer": "Gold Auto Hammer",
   "block.whackyutilities.diamond_auto_hammer": "Diamond Auto Hammer",
   "block.whackyutilities.netherite_auto_hammer": "Netherite Auto Hammer",
@@ -57,5 +57,7 @@
   "tooltip.whackyutilities.gold_auto_hammer_tooltip": "Crushes down compressed Block. Internal Speed Modifier: 2X",
   "tooltip.whackyutilities.diamond_auto_hammer_tooltip": "Crushes down compressed Block. Internal Speed Modifier: 3X",
   "tooltip.whackyutilities.netherite_auto_hammer_tooltip": "Crushes down compressed Block. Internal Speed Modifier: 4X",
-  "tooltip.whackyutilities.shift": "Hold §eShift§r for more information."
+  "tooltip.whackyutilities.shift": "Hold §eShift§r for more information.",
+  "whackyutilities.tooltip.liquid.amount.with.capacity": "%s / %s mB",
+  "whackyutilities.tooltip.liquid.amount": "%s mB"
 }
